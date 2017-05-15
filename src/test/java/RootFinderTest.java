@@ -9,12 +9,12 @@ import static org.junit.Assert.assertEquals;
 
 public class RootFinderTest {
     @Test
-    public void findRootsTest() throws Exception {
+    public void findRootTest() throws Exception {
         ArrayList<Double> coefficients = new ArrayList<>(Arrays.asList(-6d, 11d, -6d, 1d));
         double epsilon = 0.0001d;
 
         RootFinder testRootFinder = new RootFinder(coefficients, epsilon, 1000);
-        assertEquals(1d, testRootFinder.findRoots(0, 1.5d), epsilon);
+        assertEquals(1d, testRootFinder.findRoot(0, 1.5d), epsilon);
     }
 
     @Test
@@ -23,7 +23,7 @@ public class RootFinderTest {
         double epsilon = 0.0001d;
 
         RootFinder testRootFinder = new RootFinder(coefficients, epsilon, 1000);
-        assertEquals(0d, testRootFinder.findRoots(0, 6), epsilon);
+        assertEquals(0d, testRootFinder.findRoot(0, 6), epsilon);
     }
 
 
@@ -37,7 +37,7 @@ public class RootFinderTest {
 
         thrown.expect(RuntimeException.class);
         thrown.expectMessage("wrong endpoints, function value has same sign for both endpoints");
-        testRootFinder.findRoots(1,2);
+        testRootFinder.findRoot(1,2);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class RootFinderTest {
 
         thrown.expect(RuntimeException.class);
         thrown.expectMessage("no root found, max number of attempts exceeded");
-        testRootFinder.findRoots(-110,150);
+        testRootFinder.findRoot(-110,150);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class RootFinderTest {
 
         thrown.expect(RuntimeException.class);
         thrown.expectMessage("left endpoint greater than right endpoint");
-        testRootFinder.findRoots(100,-100);
+        testRootFinder.findRoot(100,-100);
     }
 
 }

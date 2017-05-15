@@ -1,12 +1,10 @@
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
 import static java.lang.Math.signum;
-import static java.lang.Math.toDegrees;
 
 public class RootFinder {
 
@@ -20,13 +18,13 @@ public class RootFinder {
         this.maxAttempts = maxAttempts;
     }
 
-    public double findRoots(double leftEndpoint, double rightEndpoint)
+    public double findRoot(double leftEndpoint, double rightEndpoint)
     {
         int attemptNo = 1;
         if(leftEndpoint > rightEndpoint)
             throw new RuntimeException("left endpoint greater than right endpoint");
 
-        if (getPolynomialValue(leftEndpoint) * getPolynomialValue(rightEndpoint) < 0) {
+        if (getPolynomialValueFor(leftEndpoint) * getPolynomialValueFor(rightEndpoint) < 0) {
             while (attemptNo <= maxAttempts) {
                 double middleValue = (leftEndpoint + rightEndpoint) / 2;
 
@@ -35,7 +33,7 @@ public class RootFinder {
                     return middleValue;
 
                 // choose left or right subinterval
-                if (signum(getPolynomialValue(middleValue)) == signum(getPolynomialValue(leftEndpoint)))
+                if (signum(getPolynomialValueFor(middleValue)) == signum(getPolynomialValueFor(leftEndpoint)))
                     leftEndpoint = middleValue;
                 else
                     rightEndpoint = middleValue;
@@ -55,10 +53,10 @@ public class RootFinder {
 
     private boolean isRoot(double x)
     {
-        return getPolynomialValue(x) == 0;
+        return getPolynomialValueFor(x) == 0;
     }
 
-    private double getPolynomialValue(double x) {
+    private double getPolynomialValueFor(double x) {
         double sourceX = x;
         double result = coefficients.get(0);
         for (int i = 1; i < coefficients.size(); i++) {
@@ -70,7 +68,6 @@ public class RootFinder {
 
     public static void main(String... args) throws Exception
     {
-        // usage: RootFinder <poczatekPrzedzialu> <koniecPrzedzialu> <epsilon> <maxIloscIteracji> <a0> <a1> ... <an>
         // usage: RootFinder <k> <l> <eps> <max> <a0> <a1> ... <an>
         if(args.length < 5) {
             printUsage();
@@ -96,7 +93,7 @@ public class RootFinder {
 
         // calculations
         RootFinder runRootFinder = new RootFinder(coefficients, epsilon,maxAttempts);
-        double result = runRootFinder.findRoots(leftEndpoint, rightEndpoint);
+        double result = runRootFinder.findRoot(leftEndpoint, rightEndpoint);
 
         // rounding to print proper decimal places
         StringBuilder pattern = new StringBuilder("#.");
@@ -113,7 +110,7 @@ public class RootFinder {
 
     public static void printUsage()
     {
-        System.out.println("wrong parameters");
+        System.out.println("wrong arguments");
         System.out.println("usage: RootFinder <k> <l> <eps> <max> <a0> <a1> ... <an>");
         System.out.println("polynomial: a0 + a1*x + a2*x^2 + ... + an*x^n");
         System.out.printf("e.g. parameters: -2 4 0.0001 1000 -1 0 7 1 -1 -1");
